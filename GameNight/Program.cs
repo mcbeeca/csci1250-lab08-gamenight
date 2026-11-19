@@ -8,7 +8,6 @@
 * and adds tonight's result to a history that grows every week.
 */
 
-//Part 1: The Standing
 
 const string PLAYERS_FILE = "players.txt";
 const string POINTS_FILE = "points.txt";
@@ -25,6 +24,7 @@ Console.Write("POINTS\n");
 
 string[] players  = File.ReadAllLines(PLAYERS_FILE);
 string[] points  = File.ReadAllLines(POINTS_FILE);
+string[] history = File.ReadAllLines(HISTORY_FILE);
 
 static int LeaderIndex(string[] points)
 {
@@ -42,7 +42,9 @@ static int LeaderIndex(string[] points)
     return leaderPosition;
 }
 
-// for: the index for players and the index for points are seperate, so we need a way to combine those values
+// Part 1: The Standing
+// for: the array for players and the array for points are seperate, 
+// so we need a way to output a specific position from each array
 for (int i = 0; i < players.Length; i++)
         {
             Console.WriteLine(players[i].PadRight(11)+points[i]);
