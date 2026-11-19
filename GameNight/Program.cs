@@ -25,21 +25,23 @@ string[] players  = File.ReadAllLines(PLAYERS_FILE);
 string[] points  = File.ReadAllLines(POINTS_FILE);
 string[] history = File.ReadAllLines(HISTORY_FILE);
 
-static int LeaderIndex(string[] points)
+//Part 3: The History (top)
+int night = history.Length;
+Console.WriteLine("=== GAME NIGHT LEADERBOARD ===");
+if(night == 0)
 {
-    int leaderPoints = 0;
-    int leaderPosition = 0;
-    // for: need the index of each point so it can remember the leader's position
-    for (int i = 0; i < points.Length; i++)
-    {
-        if (Convert.ToInt32(points[i]) > leaderPoints)
-    {
-        leaderPoints = Convert.ToInt32(points[i]);
-        leaderPosition = i;
-    }
-    }
-    return leaderPosition;
+    Console.WriteLine("No nights played yet.");
 }
+else
+{
+    Console.WriteLine($"Nights played: {night}");
+    //foreach: only need to output every string
+    foreach(string nightStr in history)
+    {
+        System.Console.WriteLine("  " + nightStr);
+    }
+}
+Console.WriteLine($"Tonight is Night {++night}\n");
 
 // Part 1: The Standing
 // for: the array for players and the array for points are seperate, 
@@ -50,19 +52,6 @@ for (int i = 0; i < players.Length; i++)
         }
 
 Console.WriteLine($"Leader: {players[LeaderIndex(points)]} with {points[LeaderIndex(points)]}");
-
-static int TotalPoints(string[] points)
-{
-    int totalPoints = 0;
-    // foreach: compiles all of the info in the points array rather than a specific value
-    foreach (string point in points)
-    {
-        totalPoints += Convert.ToInt32(point);
-    }
-    return totalPoints;
-}
-
-Console.WriteLine($"Total points: {TotalPoints(points)}");
 
 //Part 2: Game Night
 
@@ -99,3 +88,42 @@ System.Console.WriteLine($"Tonight's winner: {players[tonightWinner]} with {toni
 File.WriteAllLines(POINTS_FILE, points);
 System.Console.WriteLine($"\nSaved {POINTS_FILE}.");
 
+//Part 3: The History (back half)
+string[] entry = {HistoryEntry(night, players[tonightWinner], tonightWinnerPoints) };
+File.AppendAllLines(HISTORY_FILE, entry);
+System.Console.WriteLine($"Added to {HISTORY_FILE}: {entry[0]}");
+
+static int LeaderIndex(string[] points)
+{
+    int leaderPoints = 0;
+    int leaderPosition = 0;
+    // for: need the index of each point so it can remember the leader's position
+    for (int i = 0; i < points.Length; i++)
+    {
+        if (Convert.ToInt32(points[i]) > leaderPoints)
+    {
+        leaderPoints = Convert.ToInt32(points[i]);
+        leaderPosition = i;
+    }
+    }
+    return leaderPosition;
+}
+
+static int TotalPoints(string[] points)
+{
+    int totalPoints = 0;
+    // foreach: compiles all of the info in the points array rather than a specific value
+    foreach (string point in points)
+    {
+        totalPoints += Convert.ToInt32(point);
+    }
+    return totalPoints;
+}
+
+Console.WriteLine($"Total points: {TotalPoints(points)}");
+
+static string HistoryEntry(int night, string winner, int points)
+{
+    string winnerOutput = $"Night {night}: {winner} won with {points} points.";
+    return winnerOutput;
+}
